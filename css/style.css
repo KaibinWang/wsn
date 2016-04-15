@@ -1,0 +1,60 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	background-image: url(../img/bg.jpg);
+}
+#wrapper {
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+	position: relative;
+	width: 1000px;
+}
+#content {
+	float: left;
+	background: #f2f2f2;
+	height: auto;
+	float: left;
+	padding: 3%;
+}
+#sidebar {
+	width: 44%;
+	background: #ececec;
+	float: left;
+	padding: 3%;
+}
+#footer {
+	clear: both;
+	float: left;
+	margin: 10px 0 30px 0;
+	width: 100%;
+}
+#footer p{
+font:.75em Arial, 'Helvetica Neue', Helvetica, sans-serif;
+color:#ccc;
+}
+/* button */
+#node_list button ul:hover{background-color:#FFF}
+/*  */
+#header {
+	font-family: Verdana, Geneva, sans-serif;
+	margin-bottom: 20px;
+}
+/*  */
+@font-face {
+	font-family: 'New Cicle Fina';
+	src: url('New_Cicle_Fina.eot');
+	src: local('New Cicle Fina'), local('NewCicle-Fina'), url('New_Cicle_Fina.woff') format('woff'), url('New_Cicle_Fina.ttf') format('truetype'), url('New_Cicle_Fina.svg#NewCicle-Fina') format('svg');
+}
+p,li{
+	color: #666;
+	text-align: left;
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+	line-height: 2.0;
+}
+h1{
+	font-size: x-large;
+	line-height: 2.0;
+	font-family: Garamond, "Hoefler Text", "Times New Roman", Times, serif;
+}
