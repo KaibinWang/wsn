@@ -24,7 +24,8 @@
 	font-size: 18px;
 }
 .move-bg{ display:none;position:absolute;left:0;top:0; width:120px; height:40px; background:#4D0B33; z-index:0}
-</style>		
+</style>
+<link rel="stylesheet" type="text/css" href="css/spinner.css">
 </head>
 
 <body>
@@ -47,76 +48,42 @@
 	<div id="content" style=" width:94%; height:auto;"><!-- Start Content -->
 		
 	  	<h1>节点详细信息</h1>
-			
-		<?php
-	    require_once 'db_info.php';
-	    date_default_timezone_set('Etc/GMT-8');
-		$id = $_GET['id'];
-	    $query = "SELECT * FROM wsn_node_data WHERE NodeID=".$id;
-	    $result = mysqli_query(get_connect(),$query);
-	    if(!$result) die('Unable Query Table:'.mysql_error());
-	            
-	    $row = mysqli_fetch_row($result);
 	    
-	    $_SESSION["temp"]=$id;
-	    ?>
-	    
-	    <div id="left_ul" style="float:left; width:300px; padding-bottom:2%">
+		<div id="left_ul" style="float:left; width:300px;padding-bottom: 2%">
 	        <ul>
 		        <li>
-		        节点ID:<?php echo $row[0]?>
+		        节点ID:<span id="id"></span>
 		        </li>
 		        <li>
-		        下一跳节点ID:<?php echo $row[2]?>
+		        节点类型:<span id="type"></span>
 		        </li>
 		        <li>
-		        电压:<?php echo $row[7]?>
+		        下一跳节点ID:<span id="next"></span>
+		        </li>
+		        <li>
+		        电压:<span id="vol"></span>
 		        </li>
 	      	</ul>
 	    </div>
 
-	    <div id="right_ul" style="width:300px; float:left; padding-bottom:2%">
+	    <div id="right_ul" style="width:300px; float:left;padding-bottom: 2%">
 	        <ul>
 		        <li>
-		        光照强度:<?php echo $row[5]?>
+		        光照强度:<span id="lig"></span>
 		        </li>
 		        <li>
-		        温度:<?php echo $row[3]?>
+		        温度:<span id="tem"></span>
 		        </li>
 		        <li>
-		        湿度:<?php echo $row[4]?>
+		        湿度:<span id="hum"></span>
 		        </li>
 		        <li>
-		        最后更新时间:<?php echo date("Y-m-d H:i:s", $row[8])?>
+		        最后更新时间:<span id="last_time"></span>
 		        </li>
 	        </ul>
 	    </div>
-
-	    <div id="neibornode" style="float:left">
-			<table border="1px">
-		    <th>邻居节点</th><th>RSSI</th><th>时间</th><th>信号值</th><th>距离</th>
-		    <?php 
-				$query1 = "SELECT NeighborNodeID,Rssi_value,AddTime FROM wsn_neighbor_relation WHERE NodeID=".$id."&&AddTime>".(time()-31*24*60*60);
-		    	$result1 = mysqli_query(get_connect(),$query1);
-		    	if(!$result1) die('Unable Query Table:'.mysql_error());
-					while($row = mysqli_fetch_row($result1)){
-						echo "<tr>";
-						
-						$r = $row[1];
-						
-						if($r>128){$rssi=($r-256)-45;}else{$rssi=$r-45;}
-						if($rssi<0){$distance=round(pow(10,(-$rssi-55)/pow(10,1.35)),4);}else{$distance=round(pow(10,($rssi-55)/pow(10,1.35)),4);}	
-							echo "<td>".$row[0]."</td>";
-							echo "<td>".$r."</td>";
-							echo "<td>".date("H:i:s", $row[2])."</td>";
-							echo "<td>&nbsp;&nbsp;".$rssi."</td>";
-							echo "<td>&nbsp;&nbsp;".$distance."</td>";
-						echo "</tr>";	
-					}
-			?>
-			</table>
-	  	</div>
-
+	    <div class="spinner" style="float:left;">
+	    </div>
 		<div style="text-align:center; float:left; width:100%; clear:both">
 		    <select id="date_type">
 		      <option value="day">日</option>
@@ -131,7 +98,6 @@
 		    	<option value="vol">电压</option>
 		    </select> 
 		   <button>查询</button>
-		    <p><font color="#FF0000">红色</font>代表最高，<font color="#0066FF">蓝色</font>代表最低</p>
 			<br />
 		    <div id='hisdata' style="min-width:700px;height:400px"></div>
 		    <br />
@@ -142,33 +108,42 @@
 		<p>Copyright &copy;<b>LLC</b></p>
 	</div><!-- End Footer -->
 </div><!-- End Wrapper -->
-
-<script type="text/javascript">
-// function datatype(datatype){
-// 	var data = document.getElementById("data_type");
-// 	var type = data.options[data.selectedIndex].value;
-// 	if(datatype=="hum"){
-// 		swfobject.embedSWF("open-flash-chart.swf", "hisdata", "800", "300", "9.0.0","expressInstall.swf",{"data-file":"history_data.php?datetype=day%26datatype=0"});
-// 	}else if(datatype=="tem"){
-// 		swfobject.embedSWF("open-flash-chart.swf", "hisdata", "800", "300", "9.0.0","expressInstall.swf",{"data-file":"history_data.php?datetype=day%26datatype=1"});
-// 	}else if(datatype=="lig"){
-// 		swfobject.embedSWF("open-flash-chart.swf", "hisdata", "800", "300", "9.0.0","expressInstall.swf",{"data-file":"history_data.php?datetype=day%26datatype=3"});
-// 	}else if(datatype=="vol"){
-// 		swfobject.embedSWF("open-flash-chart.swf", "hisdata", "800", "300", "9.0.0","expressInstall.swf",{"data-file":"history_data.php?datetype=day%26datatype=5"});
-// 	}
-	
-// }
-$(function(){
-	var datetype = $("#date_type").val();
-	var datatype = $("#data_type").val();
-	$("button").bind('click',function(){
-		datetype = $("#date_type  :selected").val();
-		datatype = $("#data_type  :selected").val();
-		$.get(
+<!--loader-->
+    <div id="loader" class="loader" style="visibility:hidden">
+		<div class="loader-inner">
+			<div class="loader-line-wrap">
+				<div class="loader-line"></div>
+			</div>
+			<div class="loader-line-wrap">
+				<div class="loader-line"></div>
+			</div>
+			<div class="loader-line-wrap">
+				<div class="loader-line"></div>
+			</div>
+			<div class="loader-line-wrap">
+				<div class="loader-line"></div>
+			</div>
+			<div class="loader-line-wrap">
+				<div class="loader-line"></div>
+			</div>
+		</div>
+	</div>
+    
+<script type="text/javascript">	
+var datetype = $("#date_type").val();
+var datatype = $("#data_type").val();
+var loader = document.getElementById("loader");
+var showload = function(){
+	loader.style.visibility = "visible";
+}
+var hideload = function(){
+	loader.style.visibility = "hidden";
+}
+var getline = function(callback){
+	$.get(
 		"history.php",
-		{datatype:datatype,datetype:datetype},
+		{nodeid:<?php echo $_GET['id'] ?>,datatype:datatype,datetype:datetype},
 		function(response){
-			console.log(response['data']);
 			$('#hisdata').highcharts({
 				title: {
 					text: response['title'],
@@ -190,32 +165,41 @@ $(function(){
 			});
 		},
 		"json"
-		);
-	});
-})
-</script>
-    
-<script type="text/javascript"> 
-	function show(str){
-		var xmlhttp;
-		if(window.XMLHttpRequest)
-		{
-			xmlhttp=new XMLHttpRequest();
-		}
-		else
-		{
-			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		xmlhttp.open("POST","request_history.php",true);
-		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-		var poststr = "histime="+str;
-		xmlhttp.send(poststr);
-		xmlhttp.onreadystatechange = function(){
-			if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			document.getElementById("txtHint").innerHTML=xmlhttp.responseText;	
-		}
+	);
+	if(typeof(callback)==="function"){
+		callback();
 	}
+}
+var infomation = function(){
+	var url = "node_info.php";
+	var data = {"nodeid":<?php echo $_GET['id'] ?>};
+	var success = function(response){
+		var response = JSON.parse(response);
+		$("#id").html(response['id']);
+		$("#type").html(response['nodetype']);
+		$("#next").html(response['nexthop']);
+		$("#tem").html(response['temperature']);
+		$("#hum").html(response['humitity']);
+		$("#lig").html(response['light']);
+		$("#vol").html(response['voltage']);
+		$("#last_time").html(response['last_time']);
+	};
+	$.get(url, data, success);
+	setInterval(function(){$.get(url, data, success)},60000);
+}
+$(function(){
+	getline(showload);
+	infomation();
+	$("button").on('click',function(){
+		datetype = $("#date_type  :selected").val();
+		datatype = $("#data_type  :selected").val();
+		getline(showload);
+	});
+	$(".loader").ajaxStop(hideload);
+})
+
 </script>
+
 </body>
 
 </html>

@@ -4,9 +4,9 @@ session_start();
 require_once('OFC/OFC_Chart.php');
 require_once 'db_info.php';
 require 'getHistoryData.php';
-$id = $_SESSION["temp"];
-$SplitTime=30;
-$SplitNum=48;
+$id = $_GET["nodeid"];
+// $SplitTime=30;
+// $SplitNum=48;
 $DataType=$_GET["datatype"];
 switch($DataType){
 	case "hum":$DataType=2;break;
@@ -40,12 +40,7 @@ switch($DataType){
 switch($DateType){
 	case "day":	
 	for($k=0;$k<=$SplitNum;$k++){
-		// if($k%4==0){
 			$tim[$k] = date('H:i',($time-$SplitTime*$SplitNum*60+$k*$SplitTime*60)); 	
-		// }
-		// else{
-			// $tim[$k] = "";	
-		// }	
 	}
 	break;
 	case "week":
@@ -55,12 +50,7 @@ switch($DateType){
 	break;
 	case "month":
 	for($k=0;$k<=$SplitNum;$k++){
-		// if($k%2==0){
 			$tim[$k] = date('m-d',($time-$SplitTime*$SplitNum*60+$k*$SplitTime*60)); 	
-		// }
-		// else{
-			// $tim[$k] = "";	
-		// }	
 	}
 	break;
 }

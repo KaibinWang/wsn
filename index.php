@@ -48,7 +48,7 @@
 
 	<div class="column" id="content" style="width:94%">
     <?php 
-			include 'xml.php';
+			require 'xml.php';
 	?>
 		<div id="map" style="width:inherit; height:500px"></div>
         <button onClick="addline()">添加路径</button>

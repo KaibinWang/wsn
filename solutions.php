@@ -56,18 +56,9 @@
 
 	<div class="column" id="content" style="width:44%">
 		<h1>节点数据</h1>
-		
-		<?php 
-        	require_once 'db_info.php';
-			// include 'xml.php';
-			$result = mysqli_query(get_connect(),'SELECT NodeID FROM wsn_node_data');
-			if(!$result) die('Unable Query Table:'.mysql_error());
-			$rows = mysqli_num_rows($result);	
-			echo "<p>总节点个数:".$rows."</p><br>";
-            	include '1.php';
-			echo "<p>未活动节点</p><br>";
-				include '2.php';
-			?>
+		<p id="nodecount">总节点个数:</p><br>
+		<p id="activenodecount">活动节点个数:</p><br>
+		<?php  include '1.php';?>
 	</div>
     <div class="column" id="sidebar">
     <div id="map" style="width:450px; height:500px"></div>
@@ -152,9 +143,20 @@ function(){
 			scene.add(new JTopo.Link(nodelist[l],nextlist[l]));	
 		}
 	}
-	stage.play(scene);
-}
-);
+	// stage.play(scene);
+	$.get("node_list.php",{type:"0"},
+	function(response){
+		var response = JSON.parse(response);
+		$("#nodecount").append(response.length);
+	}
+	);
+	$.get("node_list.php",{type:"2"},
+	function(response){
+		var response = JSON.parse(response);
+		$("#activenodecount").append(response.length);
+	}
+	);
+});
 </script>
 <script>
 $(function(){
