@@ -101,21 +101,24 @@
 	        <!-- 动态添加 -->
 	        </select>
 	        <button id="query">查询</button>
+			<br />
+			<br />
+	    <h3>最近数据查询</h3>
+			<select id="date_type">
+				<option value="day">日</option>
+				<option value="week">周</option>
+				<option value="month">月</option>
+			</select>
+			<select id="data_type" >
+				<option value="tem">温度</option>
+				<option value="hum">湿度</option>
+				<option value="lig">光照</option>
+				<option value="vol">电压</option>
+			</select> 
+	    	<button id="lastquery">查询</button>
 	    </div>
 		<div style="text-align:center; float:left; width:100%; clear:both">
-		    <select id="date_type">
-		      <option value="day">日</option>
-		      <option value="week">周</option>
-		      <option value="month">月</option>
-		    </select>
-		    
-		    <select id="data_type" >
-		    	<option value="tem">温度</option>
-		    	<option value="hum">湿度</option>
-		    	<option value="lig">光照</option>
-		    	<option value="vol">电压</option>
-		    </select> 
-		   <button id="lastquery">查询</button>
+
 			<br />
 		    <div id='hisdata' style="min-width:700px;height:400px"></div>
 		    <br />
