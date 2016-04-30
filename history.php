@@ -23,7 +23,7 @@ switch($DateType){
 date_default_timezone_set('Etc/GMT-8');
 
 $time = time();//当前时间
-$tim = Array();//X轴数组
+$tim = array();//X轴数组
 $query1 = "SELECT max(DataValue) FROM wsn_history_data WHERE NodeID=".$id."&&DataType=".$DataType."&&AddTime>".($time-$SplitNum*$SplitTime*60)."&&AddTime<".$time;
 $result1 = mysqli_query(get_connect(),$query1);
 if(!$result1)die("unable to connect");
@@ -56,7 +56,7 @@ switch($DateType){
 }
 $maxdata=getMaxData($time,$SplitTime,$SplitNum,$id,$DataType,$DataMax,$DataMin);
 $mindata= getMinData($time,$SplitTime,$SplitNum,$id,$DataType,$DataMax,$DataMin);
-$response = Array();
+$response = array();
 $response['title'] = $title;
 $response['unit'] = $unit;
 $response['time'] = $tim;

@@ -25,7 +25,6 @@
 }
 .move-bg{ display:none;position:absolute;left:0;top:0; width:120px; height:40px; background:#4D0B33; z-index:0}
 </style>
-<link rel="stylesheet" type="text/css" href="css/spinner.css">
 </head>
 
 <body>
@@ -82,7 +81,26 @@
 		        </li>
 	        </ul>
 	    </div>
-	    <div class="spinner" style="float:left;">
+	    <div style="float:left;">
+	    <h3>历史数据查询</h3>
+	    	<select id="data_type_history">
+		    	<option value="tem">温度</option>
+		    	<option value="hum">湿度</option>
+		    	<option value="lig">光照</option>
+		    	<option value="vol">电压</option>
+	    	</select>
+	    	<select id="year">
+	    		<option value="2016">2016</option>
+	    	</select>
+	        <select id="month">
+	        	<option value="2">2</option>
+	        	<option value="3">3</option>
+	        	<option value="4">4</option>
+	        </select>
+	        <select id="day">
+	        <!-- 动态添加 -->
+	        </select>
+	        <button id="query">查询</button>
 	    </div>
 		<div style="text-align:center; float:left; width:100%; clear:both">
 		    <select id="date_type">
@@ -92,12 +110,12 @@
 		    </select>
 		    
 		    <select id="data_type" >
-		    	<option value="hum">湿度</option>
 		    	<option value="tem">温度</option>
+		    	<option value="hum">湿度</option>
 		    	<option value="lig">光照</option>
 		    	<option value="vol">电压</option>
 		    </select> 
-		   <button>查询</button>
+		   <button id="lastquery">查询</button>
 			<br />
 		    <div id='hisdata' style="min-width:700px;height:400px"></div>
 		    <br />
@@ -170,6 +188,7 @@ var getline = function(callback){
 		callback();
 	}
 }
+//节点详细信息动态更改
 var infomation = function(){
 	var url = "node_info.php";
 	var data = {"nodeid":<?php echo $_GET['id'] ?>};
@@ -187,19 +206,71 @@ var infomation = function(){
 	$.get(url, data, success);
 	setInterval(function(){$.get(url, data, success)},60000);
 }
+//查询最近的历史数据曲线
 $(function(){
 	getline(showload);
 	infomation();
-	$("button").on('click',function(){
+	$("#lastquery").on('click',function(){
 		datetype = $("#date_type  :selected").val();
 		datatype = $("#data_type  :selected").val();
 		getline(showload);
 	});
+	$(".loader").ajaxStart(showload);
 	$(".loader").ajaxStop(hideload);
 })
-
 </script>
+<script>
+//根据日期查询历史数据
+$(
+	function(){
+		$("#query").on("click",function(){
+			var year = $("#year option:selected").val();
+			var month = $("#month option:selected").val();
+			var day = $("#day option:selected").val();
+			$.get(
+				"history_by_date.php",
+				{nodeid:<?php echo $_GET['id'] ?>,datatype:$("#data_type_history").val(),year:year,month:month,day:day},
+				function(response){
+					$('#hisdata').highcharts({
+						title: {
+							text: response['title'],
+							x: -20 //center
+						},
+						xAxis:{
+							categories:response['time']
+						},
+				        tooltip: {
+			        		valueSuffix: response['unit']
+				        },
+				        legend: {
+				        	layout: 'vertical',
+				         	align: 'right',
+				        	verticalAlign: 'middle',
+				        	borderWidth: 0
+				        },
+				        series:[{name:'平均值',data:response['data']}]
+					});
+				},
+				"json"
+			);
 
+		});
+	}
+);
+//根据月份更新天数
+$("#month").on("click",function(){
+	var year = $("#year option:selected").val();
+	var month = $("#month option:selected").val();
+	var day = new Date(year,month,0).getDate();
+	$("#day").empty();
+	for(var i=0;i<day;i++){
+		var d = document.createElement("option");
+		d.value = i+1;
+		d.innerHTML=i+1;
+		$("#day").append(d);
+	}
+});
+</script>
 </body>
 
 </html>

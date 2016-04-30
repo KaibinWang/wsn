@@ -4,7 +4,9 @@
  * @authors Your Name (you@example.org)
  * @date    2016-04-24 16:28:05
  * @version $Id$
+ * 功能旋转的动画
  */
+
 .spinner {	
 	  width: 40px;
 	  height: 40px;

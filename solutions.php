@@ -62,9 +62,6 @@
 	</div>
     <div class="column" id="sidebar">
     <div id="map" style="width:450px; height:500px"></div>
-<canvas id = 'canvas' width = "400" height="500" style="background-color:#EEEEEE;box-shadow:-3px -3px 3px #000, 3px 3px 3px #000; margin-top:100px">
-  
-</canvas>
 </div>
 
 	<div id="footer">
@@ -104,46 +101,6 @@ function equalHeight(group) {
 $(document).ready(
 function(){
 	equalHeight($(".column"));
-	var canvas = document.getElementById('canvas');
-	var stage = new JTopo.Stage(canvas);
-	var scene = new JTopo.Scene(stage);
-	var host = new JTopo.Node("1");
-	host.setImage('img/node.png'); 
-	host.fontColor="0,0,0";
-	scene.add(host);
-	host.setLocation(100, 150);
-	var nodelist = new Array();
-	for(i=0;i<x.length;i++){
-		var node = new JTopo.Node(x[i].getAttribute('nodeid'));
-		node.setImage('img/node.png'); 
-		node.fontColor="0,0,0";
-		var canvas = document.getElementById('canvas');
-		node.setLocation((canvas.width-100) * Math.random(), (canvas.height-100) * Math.random());
-		scene.add(node);
-		nodelist.push(node);
-	}
-	var nextlist = new Array();
-	for(j=0;j<x.length;j++){
-		for(k = 0;k < nodelist.length;k++){
-			if(x[j].getAttribute('nexthop')=='1'){
-				nextlist.push(host);
-				break;
-			}
-			else if(x[j].getAttribute('nexthop')==nodelist[k].text){
-				nextlist.push(nodelist[k]);
-				break;
-			}
-		}
-		if(nextlist[j]==null){
-			nextlist[j]=0;	
-		}
-	}
-	for(l=0;l<x.length;l++){
-		if(nextlist[l]!=0){
-			scene.add(new JTopo.Link(nodelist[l],nextlist[l]));	
-		}
-	}
-	// stage.play(scene);
 	$.get("node_list.php",{type:"0"},
 	function(response){
 		var response = JSON.parse(response);

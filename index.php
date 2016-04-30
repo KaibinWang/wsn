@@ -47,15 +47,15 @@
     </div>
 
 	<div class="column" id="content" style="width:94%">
-    <?php 
-			require 'xml.php';
-	?>
-		<div id="map" style="width:inherit; height:500px"></div>
+	    <?php 
+				require 'xml.php';
+		?>
+		<div id="map" style="width:920px; height:500px;margin:auto;"></div>
         <button onClick="addline()">添加路径</button>
         <button onClick="removeline()">移除路径</button>
-  <br>
+  		<br>
 <h2 align="center">网络结构拓扑图</h2>
-<canvas id = 'canvas' width = "900" height="500" style="background-color:#EEEEEE;border:1px solid#444;"></canvas>
+<canvas id = 'canvas' width = "920" height="500" style="background-color:#EEEEEE;border:1px solid#444;"></canvas>
 	</div>
 	<div id="footer">
 	
